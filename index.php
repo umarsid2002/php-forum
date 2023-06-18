@@ -12,6 +12,7 @@
   </head>
   <body>
   <?php include 'partial/_nav.php'; ?>
+  <?php include 'partial/_db_connect.php'; ?>
 
   <div id="carouselExampleIndicators" class="carousel slide" data-ride="carousel">
   <ol class="carousel-indicators">
@@ -43,16 +44,26 @@
   <div class="container my-3">
     <h2 class='text-center'>Iforum - Categories</h2>
     <div class="row">
-        <div class="col-md-4">
-        <div class="card" style="width: 18rem;">
-  <img src="https://source.unsplash.com/500x400/?computer,blockchain" class="card-img-top" alt="...">
-  <div class="card-body">
-    <h5 class="card-title">Card title</h5>
-    <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-    <a href="#" class="btn btn-primary">View Threads</a>
-  </div>
+
+    <?php
+
+    $sql = "SELECT * FROM `categories`";
+    $result = mysqli_query($conn, $sql);
+    while($row = mysqli_fetch_assoc($result)){
+      $cat_title = $row['cat_name'];
+      $cat_desc = $row['cat_desc'];
+      echo '<div class="col-md-4">
+      <div class="card" style="width: 18rem;">
+<img src="https://source.unsplash.com/500x400/?technology,'.$cat_title.'" class="card-img-top" alt="...">
+<div class="card-body">
+  <h5 class="card-title">'.$cat_title.'</h5>
+  <p class="card-text">'.substr($cat_desc, 0, 50).'</p>
+  <a href="#" class="btn btn-primary">View Threads</a>
 </div>
-        </div>
+</div>
+      </div>';
+    }
+    ?>
     </div>
   </div>
   <!-- https://source.unsplash.com/ -->

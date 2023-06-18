@@ -34,10 +34,12 @@ echo '<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
     <button class="btn btn-success my-2 my-sm-0" type="submit">Search</button>
   </form>
   <div class="mx-2">
-    <button class="btn btn-outline-success">Login</button>
-    <button class="btn btn-outline-success">Signup</button>
+    <button class="btn btn-outline-success" data-toggle="modal" data-target="#loginModal">Login</button>
+    <button class="btn btn-outline-success" data-toggle="modal" data-target="#signupModal">Signup</button>
   </div>
 </div>
 </nav>';
 
+include '_loginModal.php';
+include '_signupModal.php';
 ?>
