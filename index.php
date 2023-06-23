@@ -50,15 +50,16 @@
     $sql = "SELECT * FROM `categories`";
     $result = mysqli_query($conn, $sql);
     while($row = mysqli_fetch_assoc($result)){
+      $cat_id = $row['sno'];
       $cat_title = $row['cat_name'];
       $cat_desc = $row['cat_desc'];
       echo '<div class="col-md-4">
       <div class="card" style="width: 18rem;">
-<img src="https://source.unsplash.com/500x400/?technology,'.$cat_title.'" class="card-img-top" alt="...">
+<img src="card-'.$cat_id.'.jpg" class="card-img-top" alt="...">
 <div class="card-body">
-  <h5 class="card-title">'.$cat_title.'</h5>
-  <p class="card-text">'.substr($cat_desc, 0, 50).'</p>
-  <a href="#" class="btn btn-primary">View Threads</a>
+  <h5 class="card-title"><a href="threadlist.php/?cat_id='.$cat_id.'">'.$cat_title.'</a></h5>
+  <p class="card-text">'.substr($cat_desc, 0, 50).'...</p>
+  <a href="threadlist.php/?cat_id='.$cat_id.'" class="btn btn-primary">View Threads</a>
 </div>
 </div>
       </div>';
