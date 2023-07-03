@@ -12,11 +12,20 @@
   </head>
   <body>
 
+    <?php include 'partial/_db_connect.php'; ?>
   <?php include 'partial/_nav.php'; ?>
-  <?php include 'partial/_db_connect.php'; ?>
   <?php
 
   $showAlert = false;
+
+// finding sno of logged in user
+if(isset($_SESSION['loggedin'])){
+  $useremail = $_SESSION['useremail'];
+  $userSql = "SELECT * FROM `users` WHERE `user_email` = '$useremail'";
+  $userResult = mysqli_query($conn, $userSql);
+  $user = mysqli_fetch_assoc($userResult);
+  $userSno = $user['sno'];
+}
 
   $cat_id = $_GET['cat_id'];
   $sql = "SELECT * FROM `categories` WHERE sno = $cat_id";
@@ -29,7 +38,9 @@
   if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $pTitle = $_POST['pTitle'];
     $pDesc = $_POST['pDesc'];
-    $sql = "INSERT INTO `threads` (`thread_title`, `thread_desc`, `thread_cat_id`, `thread_user_id`) VALUES ('$pTitle', '$pDesc', '$cat_id', '0')";
+    // session_start();
+    
+    $sql = "INSERT INTO `threads` (`thread_title`, `thread_desc`, `thread_cat_id`, `thread_user_id`) VALUES ('$pTitle', '$pDesc', '$cat_id', '$userSno')";
     $result = mysqli_query($conn, $sql);
     $showAlert = true;
   }
@@ -58,8 +69,8 @@
 <h2>Be the first to raise a question</h2>
 
 <?php
-echo
-'<form action="/forum/threadlist.php?cat_id='.$cat_id.'" method="post" class="my-3">
+if(isset($_SESSION['loggedin'])){
+  echo '<form action="/iforum/threadlist.php?cat_id='.$cat_id.'" method="post" class="my-3">
   <div class="form-group">
     <label for="pTitle">Problem Title</label>
     <input type="text" class="form-control" id="pTitle" name="pTitle" placeholder="Problem Title">
@@ -70,6 +81,12 @@ echo
   </div>
   <button type="submit" class="btn btn-success">Submit</button>
 </form>';
+}
+
+else{
+  echo 'Please login in order to create your thread';
+}
+
 ?>
 
 <h2 class='py-2'>Browse Questions</h2>
@@ -85,12 +102,18 @@ $no_result = true;
     $id = $row['thread_id'];
     $thread_title = $row['thread_title'];
     $thread_desc = $row['thread_desc'];
+    $thread_time = $row['timestamp'];
+    $thread_user_id = $row['thread_user_id'];
+    $sql2 = "SELECT `user_email` FROM `users` WHERE `sno` = '$thread_user_id'";
+    $result2 = mysqli_query($conn, $sql2);
+    $row2 = mysqli_fetch_assoc($result2);
     $no_result = false;
 
     echo '<div class="media py-3">
-    <img src="http://localhost:8080/forum/user.png" width="54" class="mr-3" alt="...">
+    <img src="http://localhost/iforum/user.png" width="54" class="mr-3" alt="...">
     <div class="media-body">
-      <h5 class="mt-0"><a class="text-dark" href="/forum/thread.php?thread_id='.$id.'">'.$thread_title.'</a></h5>
+    <p class="font-weight-bold my-0">'.$row2['user_email'].' at '.$thread_time.'</p>
+      <h5 class="mt-0"><a class="text-dark" href="/iforum/thread.php?thread_id='.$id.'">'.$thread_title.'</a></h5>
       '.$thread_desc.'
     </div>
   </div>';

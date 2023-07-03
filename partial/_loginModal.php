@@ -8,19 +8,15 @@
         </button>
       </div>
       <div class="modal-body">
-      <form>
+      <form action='/iforum/partial/handleLogin.php' method='post'>
       <div class="form-group">
-        <label for="loginEmail">Email address</label>
-        <input type="email" class="form-control" id="loginEmail" aria-describedby="emailHelp" placeholder="Enter email">
+        <label for="loginEmail">Username</label>
+        <input type="text" class="form-control" name='loginEmail' id="loginEmail" aria-describedby="emailHelp" placeholder="Enter email">
         <small id="emailHelp" class="form-text text-muted">We\'ll never share your email with anyone else.</small>
       </div>
       <div class="form-group">
         <label for="loginPassword">Password</label>
-        <input type="password" class="form-control" id="loginPassword" placeholder="Password">
-      </div>
-      <div class="form-group form-check">
-        <input type="checkbox" class="form-check-input" id="exampleCheck1">
-        <label class="form-check-label" for="exampleCheck1">Check me out</label>
+        <input type="password" class="form-control" name='loginPassword' id="loginPassword" placeholder="Password">
       </div>
       <button type="submit" class="btn btn-primary">Submit</button>
     </form>

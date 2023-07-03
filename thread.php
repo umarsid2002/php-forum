@@ -12,9 +12,18 @@
   </head>
   <body>
 
+    <?php include 'partial/_db_connect.php'; ?>
   <?php include 'partial/_nav.php'; ?>
-  <?php include 'partial/_db_connect.php'; ?>
   <?php
+
+// finding sno of logged in user
+if(isset($_SESSION['loggedin'])){
+  $useremail = $_SESSION['useremail'];
+  $userSql = "SELECT * FROM `users` WHERE `user_email` = '$useremail'";
+  $userResult = mysqli_query($conn, $userSql);
+  $user = mysqli_fetch_assoc($userResult);
+  $userSno = $user['sno'];
+}
 
   $showAlert = false;
   $no_result = true;
@@ -25,12 +34,13 @@
       $no_result = false;
       $thread_name = $row['thread_title'];
       $thread_desc = $row['thread_desc'];
+      $thread_user_id = $row['thread_user_id'];
     }
 
     if ($_SERVER['REQUEST_METHOD'] == 'POST') {
       // Insert comment into db
       $comment = $_POST['comment'];
-      $sql = "INSERT INTO `comments` (`comment_content`, `thread_id`, `comment_by`) VALUES ('$comment', '$thread_id', '0');
+      $sql = "INSERT INTO `comments` (`comment_content`, `thread_id`, `comment_by`) VALUES ('$comment', '$thread_id', '$userSno');
       ";
       $result = mysqli_query($conn, $sql);
       $showAlert = true;
@@ -55,20 +65,30 @@
   <hr class="my-4">
   <p>Read our forums everyday and stay tuned to the solutions of the upcoming problems</p>
   <!-- <a class="btn btn-primary btn-lg" href="#" role="button">Learn more</a> -->
-  <p class='py-2 font-weight-bold'>Posted by: Umar</p>
+  <?php
+  $thread_user_sql = "SELECT user_email FROM `users` WHERE sno=".$thread_user_id."";
+  $thread_user_result = mysqli_query($conn, $thread_user_sql);
+  $threadUser = mysqli_fetch_assoc($thread_user_result);
+  echo "<p class='py-2'>Posted by: <b>".$threadUser['user_email']."</b></p>";
+  ?>
 </div>
 
 <h2>Post a comment</h2>
 
 <?php
-echo
-'<form action="/forum/thread.php?thread_id='.$thread_id.'" method="post" class="my-3">
-  <div class="form-group">
-    <label for="comment">Type Your Comment</label>
-    <textarea class="form-control" id="comment" name="comment" rows="5"></textarea>
-  </div>
-  <button type="submit" class="btn btn-success">Post Comment</button>
-</form>';
+if(isset($_SESSION['loggedin'])){
+  echo
+  '<form action="/iforum/thread.php?thread_id='.$thread_id.'" method="post" class="my-3">
+    <div class="form-group">
+      <label for="comment">Type Your Comment</label>
+      <textarea class="form-control" id="comment" name="comment" rows="5"></textarea>
+    </div>
+    <button type="submit" class="btn btn-success">Post Comment</button>
+  </form>';
+}
+else{
+  echo 'Please login to post your comment';
+}
 ?>
 
 <h3 class='py-2'>Browse Comments</h3>
@@ -80,11 +100,16 @@ $sql = "SELECT * FROM `comments` WHERE thread_id = $thread_id";
 $result = mysqli_query($conn, $sql);
   while($row = mysqli_fetch_assoc($result)){
     $comment_content = $row['comment_content'];
+    $comment_time = $row['comment_time'];
+    $comment_by = $row['comment_by'];
+    $userSql = "SELECT `user_email` FROM `users` WHERE `sno` = '$comment_by'";
+    $userResult = mysqli_query($conn, $userSql);
+    $userRow = mysqli_fetch_assoc($userResult);
 
     echo '<div class="media py-3">
-    <img src="http://localhost:8080/forum/user.png" width="54" class="mr-3" alt="...">
+    <img src="http://localhost/iforum/user.png" width="54" class="mr-3" alt="...">
     <div class="media-body">
-      
+    <p class="font-weight-bold my-0">'.$userRow['user_email'].' at '.$comment_time.'</p>
       '.$comment_content.'
     </div>
   </div>';

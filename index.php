@@ -11,8 +11,8 @@
     <title>Iforum - For blog Lovers</title>
   </head>
   <body>
-  <?php include 'partial/_nav.php'; ?>
-  <?php include 'partial/_db_connect.php'; ?>
+    <?php include 'partial/_db_connect.php'; ?>
+    <?php include 'partial/_nav.php'; ?>
 
   <div id="carouselExampleIndicators" class="carousel slide" data-ride="carousel">
   <ol class="carousel-indicators">

@@ -8,19 +8,19 @@
         </button>
       </div>
       <div class="modal-body">
-      <form>
+      <form action='partial/_handleSignup.php' method='post'>
       <div class="form-group">
-        <label for="signupEmail">Email address</label>
-        <input type="email" class="form-control" id="signupEmail" aria-describedby="emailHelp" placeholder="Enter email">
+        <label for="signupEmail">Username</label>
+        <input type="text" class="form-control" name='signupEmail' id="signupEmail" aria-describedby="emailHelp" placeholder="Enter email">
         <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small>
       </div>
       <div class="form-group">
         <label for="signupPassword">Password</label>
-        <input type="password" class="form-control" id="signupPassword" placeholder="Password">
+        <input type="password" class="form-control" name='signupPassword' id="signupPassword" placeholder="Password">
       </div>
       <div class="form-group">
         <label for="signupCPassword">Confirm Password</label>
-        <input type="password" class="form-control" id="signupCPassword" placeholder="Password">
+        <input type="password" class="form-control" name='signupCPassword' id="signupCPassword" placeholder="Password">
       </div>
       <div class="form-group form-check">
         <input type="checkbox" class="form-check-input" id="exampleCheck1">
